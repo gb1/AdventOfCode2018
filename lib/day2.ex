@@ -46,10 +46,36 @@ defmodule Aoc.Day2 do
     |> Enum.filter(&(elem(&1, 1) != []))
     |> Enum.map( &( ( elem(&1, 0) -- List.flatten(elem(&1, 1))) |> to_string ) )
     |> Enum.uniq
+    |> List.first
+    |> String.replace("\r", "")
 
-   # Enum.at(Enum.at(matches, 0), 0) -- Enum.at(Enum.at(Enum.at(matches, 1), 1), 0)
-   # |> to_string() |> String.replace("\r", "")
+  end
 
+  #rewrite with comprehensions!
+  def part2_clean(file) do
+    lines = Utils.input_lines_into_list(file)
+    |> Enum.map( &String.graphemes(&1))
+
+    for line <- lines do
+      for compare <- lines do
+        diffs =
+        for {x,y} <- Enum.zip(line, compare) do
+          cond do
+          x != y -> line -- [x]
+          true -> nil
+          end
+        end
+
+        diffs
+        |> Enum.filter(&(&1 != nil))
+      end
+      |> Enum.filter(&(length(&1) == 1))
+      |> List.flatten
+    end
+    |> Enum.filter(&(length(&1) != 0))
+    |> List.first
+    |> to_string
+    |> String.replace("\r", "")
 
   end
 

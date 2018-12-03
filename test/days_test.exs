@@ -26,8 +26,8 @@ defmodule AocTest.Day1Test do
   end
 
   test "day 2 part 2" do
-    assert Day2.part2("day2_test2") == "fgij"
-    assert Day2.part2("day2") == "iosnxmfkpabcjpdywvrtahluy"
+    assert Day2.part2_clean("day2_test2") == "fgij"
+    assert Day2.part2_clean("day2") == "iosnxmfkpabcjpdywvrtahluy"
   end
 
 
