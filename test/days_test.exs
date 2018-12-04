@@ -2,6 +2,7 @@ defmodule AocTest.Day1Test do
   use ExUnit.Case
   alias Aoc.Day1
   alias Aoc.Day2
+  alias Aoc.Day3
 
   @tag :skip
   test "day 1 part1" do
@@ -25,10 +26,14 @@ defmodule AocTest.Day1Test do
     assert Day2.part1("day2") == 8610
   end
 
+  @tag :skip
   test "day 2 part 2" do
     assert Day2.part2_clean("day2_test2") == "fgij"
     assert Day2.part2_clean("day2") == "iosnxmfkpabcjpdywvrtahluy"
   end
 
+  test "day 3 part 1" do
+    assert Day3.part1("day3") == 100
+  end
 
 end
