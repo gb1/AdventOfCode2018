@@ -24,7 +24,8 @@ defmodule Aoc.MixProject do
       {:combination, "~> 0.0.3"},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
       {:exsync, "~> 0.2", only: :dev},
-      {:matrex, "~> 0.6"}
+      {:matrex, "~> 0.6"},
+      {:timex, "~> 3.4"}
     ]
   end
 end

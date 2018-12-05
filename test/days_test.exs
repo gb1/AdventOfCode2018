@@ -32,6 +32,7 @@ defmodule AocTest.Day1Test do
     assert Day2.part2_clean("day2") == "iosnxmfkpabcjpdywvrtahluy"
   end
 
+  @tag :skip
   test "day 3 part 1" do
     assert Day3.part1("day3") == 100
   end
