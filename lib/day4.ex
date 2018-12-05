@@ -21,8 +21,7 @@ defmodule Aoc.Day4 do
 
     sleepiest_minute = find_sleepiest_minute(log, sleepiest_guard)
 
-    String.to_integer(sleepiest_guard) *  sleepiest_minute
-
+    String.to_integer(sleepiest_guard) * sleepiest_minute
   end
 
   def parse_timestamp(string) do
@@ -65,7 +64,7 @@ defmodule Aoc.Day4 do
     |> Enum.map(fn {guard, times} ->
       {guard,
        times
-       |> Enum.chunk(2)
+       |> Enum.chunk_every(2)
        |> Enum.map(fn [sleep, wake] ->
          DateTime.diff(wake, sleep)
        end)
@@ -74,7 +73,7 @@ defmodule Aoc.Day4 do
   end
 
   def find_sleepiest_minute(log, guard) do
-    times = log[guard] |> Enum.chunk(2)
+    times = log[guard] |> Enum.chunk_every(2)
 
     times
     |> Enum.map(fn [sleep, wake] ->
@@ -92,15 +91,73 @@ defmodule Aoc.Day4 do
           |> Enum.at(1)
         )
 
-      sleep_sec..wake_sec-1
+      sleep_sec..(wake_sec - 1)
       |> Enum.to_list()
     end)
     |> List.flatten()
-    |> Enum.sort
-    |> Enum.chunk_by(&(&1))
-    |> Enum.sort_by(&(length(&1)))
-    |> Enum.reverse
-    |> List.first
-    |> List.first
+    |> Enum.sort()
+    |> Enum.chunk_by(& &1)
+    |> Enum.sort_by(&length(&1))
+    |> Enum.reverse()
+    |> List.first()
+    |> List.first()
   end
+
+  def part2(file) do
+    guard_sleepy_seconds =
+      Utils.input_lines_into_list(file)
+      |> Enum.map(&String.split(&1, ["[", "]"], trim: true))
+      |> Enum.map(fn [timestamp, log] ->
+        action = parse_action(log)
+
+        {parse_timestamp(timestamp), action}
+      end)
+      |> Enum.sort_by(&DateTime.to_unix(elem(&1, 0)))
+      |> process_log("", %{})
+      |> sleepy_seconds
+
+
+      a = for i <- 0..59 do
+        guard_sleepy_seconds
+        |> Enum.map( fn({guard, seconds}) ->
+          {i, guard, length(Enum.filter(seconds, &(&1 == i)))}
+        end)
+
+      end
+
+      {sec, guard, _freq} = a
+      |> List.flatten
+      |> Enum.max_by( fn({sec, guard, freq}) -> freq end)
+      sec * String.to_integer(guard)
+  end
+
+  def sleepy_seconds(logs) do
+    logs
+    |> Enum.map(fn {guard, times} ->
+      {guard,
+       times
+       |> Enum.chunk_every(2)
+       |> Enum.map(fn [sleep, wake] ->
+
+        s = String.to_integer(
+          Time.to_string(DateTime.to_time(sleep))
+          |> String.split(":")
+          |> Enum.at(1)
+        )
+
+        w = String.to_integer(
+          Time.to_string(DateTime.to_time(wake))
+          |> String.split(":")
+          |> Enum.at(1)
+        )
+
+        s..w-1
+        |> Enum.to_list
+       end)
+       |> List.flatten
+
+       }
+    end)
+  end
+
 end
